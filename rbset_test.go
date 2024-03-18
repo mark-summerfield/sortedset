@@ -25,11 +25,11 @@ func TestAPI(t *testing.T) {
 		t.Errorf("expected %q; got %q", expected, text)
 	}
 	size := set.Len()
-	ok := set.Find('Y')
+	ok := set.Contains('Y')
 	if ok {
 		t.Error("expected false; got true")
 	}
-	ok = set.Find('B')
+	ok = set.Contains('B')
 	if !ok {
 		t.Errorf("expected true; got %t", ok)
 	}
@@ -101,18 +101,18 @@ func TestStringKeyInsertion(t *testing.T) {
 	}
 }
 
-func TestIntKeyFind(t *testing.T) {
+func TestIntKeyContains(t *testing.T) {
 	var intSet RbSet[int]
 	for _, number := range []int{9, 1, 8, 2, 7, 3, 6, 4, 5, 0} {
 		intSet.Insert(number)
 	}
 	for _, number := range []int{0, 1, 5, 8, 9} {
-		if ok := intSet.Find(number); !ok {
+		if ok := intSet.Contains(number); !ok {
 			t.Errorf("failed to find %d", number)
 		}
 	}
 	for _, number := range []int{-1, -21, 10, 11, 148} {
-		if ok := intSet.Find(number); ok {
+		if ok := intSet.Contains(number); ok {
 			t.Errorf("should not have found %d", number)
 		}
 	}
@@ -161,27 +161,27 @@ func passTree(set *RbSet[int], t *testing.T) {
 }
 
 // Thanks to Russ Cox for improving these benchmarks
-func BenchmarkFindSuccess(b *testing.B) {
+func BenchmarkContainsSuccess(b *testing.B) {
 	b.StopTimer() // Don't time creation and population
 	var intSet RbSet[int]
 	for i := range 1000000 {
 		intSet.Insert(i)
 	}
-	b.StartTimer() // Time the Find() method succeeding
+	b.StartTimer() // Time the Contains() method succeeding
 	for i := range b.N {
-		intSet.Find(i % 1e6)
+		intSet.Contains(i % 1e6)
 	}
 }
 
-func BenchmarkFindFailure(b *testing.B) {
+func BenchmarkContainsFailure(b *testing.B) {
 	b.StopTimer() // Don't time creation and population
 	intSet := RbSet[int]{}
 	for i := range 1000000 {
 		intSet.Insert(2 * i)
 	}
-	b.StartTimer() // Time the Find() method failing
+	b.StartTimer() // Time the Contains() method failing
 	for i := range b.N {
-		intSet.Find(2*(i%1e6) + 1)
+		intSet.Contains(2*(i%1e6) + 1)
 	}
 }
 

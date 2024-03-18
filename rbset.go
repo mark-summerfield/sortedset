@@ -118,11 +118,11 @@ func all[E Comparable](root *node[E], yield func(E) bool) {
 	}
 }
 
-// Find returns true if the element is in the tree; otherwise false.
+// Contains returns true if the element is in the tree; otherwise false.
 // For example:
 //
-//	ok := set.Find(element).
-func (me *RbSet[E]) Find(element E) bool {
+//	ok := set.Contains(element).
+func (me *RbSet[E]) Contains(element E) bool {
 	found := false
 	root := me.root
 	for root != nil {

@@ -1,3 +1,4 @@
+# TODO Intersection, Difference, Union, Unite, etc.
 rbset.go
 
 rbset_test.go
