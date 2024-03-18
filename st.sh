@@ -3,7 +3,9 @@ clc -s -e rbset_test.go
 cat Version.dat
 go mod tidy
 go fmt .
-staticcheck .
+echo \* cannot do "staticcheck ." no range func support
+# staticcheck .
 go vet .
-golangci-lint run
+echo \* cannot do "golangci-lint run" no range func support
+# golangci-lint run
 git st
