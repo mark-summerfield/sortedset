@@ -84,6 +84,11 @@ func Test2(t *testing.T) {
 		}
 		i++
 	}
+	for element := range set.All() {
+		if element == 1 {
+			break
+		}
+	}
 }
 
 func TestStringKeyInsertion(t *testing.T) {

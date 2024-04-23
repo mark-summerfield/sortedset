@@ -108,14 +108,19 @@ func (me *RbSet[E]) All() iter.Seq[E] {
 	}
 }
 
-func all[E Comparable](root *node[E], yield func(E) bool) {
+func all[E Comparable](root *node[E], yield func(E) bool) bool {
 	if root != nil {
-		all(root.left, yield)
-		if !yield(root.element) {
-			return
+		if !all(root.left, yield) {
+			return false
 		}
-		all(root.right, yield)
+		if !yield(root.element) {
+			return false
+		}
+		if !all(root.right, yield) {
+			return false
+		}
 	}
+	return true
 }
 
 // Contains returns true if the element is in the tree; otherwise false.
