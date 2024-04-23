@@ -110,15 +110,9 @@ func (me *RbSet[E]) All() iter.Seq[E] {
 
 func all[E Comparable](root *node[E], yield func(E) bool) bool {
 	if root != nil {
-		if !all(root.left, yield) {
-			return false
-		}
-		if !yield(root.element) {
-			return false
-		}
-		if !all(root.right, yield) {
-			return false
-		}
+		return all(root.left, yield) &&
+			yield(root.element) &&
+			all(root.right, yield)
 	}
 	return true
 }
