@@ -1,5 +1,5 @@
 // Copyright © 2024 Mark Summerfield. All rights reserved.
-package rbset
+package sortedset
 
 import (
 	"fmt"
@@ -11,9 +11,9 @@ import (
 func TestAPI(t *testing.T) {
 	//                 012345678
 	letters := []rune("ZENZEBRAS")
-	set := RbSet[rune]{}
-	for _, letter := range letters {
-		set.Insert(letter)
+	set := SortedSet[rune]{}
+	for i := 0; i < len(letters); i++ {
+		set.Insert(letters[i])
 	}
 	var out strings.Builder
 	for letter := range set.All() {
@@ -24,7 +24,6 @@ func TestAPI(t *testing.T) {
 	if expected != text {
 		t.Errorf("expected %q; got %q", expected, text)
 	}
-	size := set.Len()
 	ok := set.Contains('Y')
 	if ok {
 		t.Error("expected false; got true")
@@ -33,7 +32,6 @@ func TestAPI(t *testing.T) {
 	if !ok {
 		t.Errorf("expected true; got %t", ok)
 	}
-	size = set.Len()
 	deleted := set.Delete('Y')
 	if deleted {
 		t.Error("expected false; got true")
@@ -42,7 +40,7 @@ func TestAPI(t *testing.T) {
 	if !deleted {
 		t.Error("expected true; got false")
 	}
-	size = set.Len()
+	size := set.Len()
 	if size != 6 {
 		t.Errorf("expected 6; got %d", size)
 	}
@@ -57,7 +55,7 @@ func Test1(t *testing.T) {
 	data := []string{"can", "in", "a", "ebony", "go", "be", "dent", "for"}
 	expected := []string{"a", "be", "can", "dent", "ebony", "for", "go",
 		"in"}
-	var set RbSet[string]
+	var set SortedSet[string]
 	for _, datum := range data {
 		set.Insert(datum)
 	}
@@ -73,7 +71,7 @@ func Test1(t *testing.T) {
 func Test2(t *testing.T) {
 	data := []int{3, 8, 1, 5, 7, 2, 4, 6, 8, 5, 2, 7}
 	expected := []int{1, 2, 3, 4, 5, 6, 7, 8}
-	set := RbSet[int]{}
+	set := SortedSet[int]{}
 	for _, datum := range data {
 		set.Insert(datum)
 	}
@@ -92,7 +90,7 @@ func Test2(t *testing.T) {
 }
 
 func TestStringKeyInsertion(t *testing.T) {
-	var wordSet RbSet[string]
+	var wordSet SortedSet[string]
 	for _, word := range []string{"one", "Two", "THREE", "four", "Five"} {
 		wordSet.Insert(strings.ToLower(word))
 	}
@@ -107,7 +105,7 @@ func TestStringKeyInsertion(t *testing.T) {
 }
 
 func TestIntKeyContains(t *testing.T) {
-	var intSet RbSet[int]
+	var intSet SortedSet[int]
 	for _, number := range []int{9, 1, 8, 2, 7, 3, 6, 4, 5, 0} {
 		intSet.Insert(number)
 	}
@@ -124,7 +122,7 @@ func TestIntKeyContains(t *testing.T) {
 }
 
 func TestIntKeyDelete(t *testing.T) {
-	var intSet RbSet[int]
+	var intSet SortedSet[int]
 	for _, number := range []int{9, 1, 8, 2, 7, 3, 6, 4, 5, 0} {
 		intSet.Insert(number)
 	}
@@ -151,12 +149,12 @@ func TestIntKeyDelete(t *testing.T) {
 }
 
 func TestPassing(t *testing.T) {
-	var intSet RbSet[int]
+	var intSet SortedSet[int]
 	intSet.Insert(7)
 	passTree(&intSet, t)
 }
 
-func passTree(set *RbSet[int], t *testing.T) {
+func passTree(set *SortedSet[int], t *testing.T) {
 	for _, number := range []int{9, 3, 6, 4, 5, 0} {
 		set.Insert(number)
 	}
@@ -168,7 +166,7 @@ func passTree(set *RbSet[int], t *testing.T) {
 // Thanks to Russ Cox for improving these benchmarks
 func BenchmarkContainsSuccess(b *testing.B) {
 	b.StopTimer() // Don't time creation and population
-	var intSet RbSet[int]
+	var intSet SortedSet[int]
 	for i := range 1000000 {
 		intSet.Insert(i)
 	}
@@ -180,7 +178,7 @@ func BenchmarkContainsSuccess(b *testing.B) {
 
 func BenchmarkContainsFailure(b *testing.B) {
 	b.StopTimer() // Don't time creation and population
-	intSet := RbSet[int]{}
+	intSet := SortedSet[int]{}
 	for i := range 1000000 {
 		intSet.Insert(2 * i)
 	}
@@ -220,16 +218,16 @@ func BenchmarkMapSortedIteration(b *testing.B) {
 	}
 }
 
-func BenchmarkRbSetInsertion(b *testing.B) {
-	var m RbSet[int]
+func BenchmarkSortedSetInsertion(b *testing.B) {
+	var m SortedSet[int]
 	for i := range 1000000 {
 		m.Insert(i)
 	}
 }
 
-func BenchmarkRbSetIteration(b *testing.B) {
+func BenchmarkSortedSetIteration(b *testing.B) {
 	b.StopTimer() // Don't time creation and population
-	var m RbSet[int]
+	var m SortedSet[int]
 	for i := range 1000000 {
 		m.Insert(i)
 	}

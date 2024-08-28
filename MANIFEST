@@ -1,7 +1,7 @@
 # TODO Intersection, Difference, Union, Unite, etc.
-rbset.go
+sortedset.go
 
-rbset_test.go
+sortedset_test.go
 
 README.md
 

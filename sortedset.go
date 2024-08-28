@@ -1,5 +1,5 @@
 // Copyright © 2024 Mark Summerfield. All rights reserved.
-package rbset
+package sortedset
 
 import "iter"
 
@@ -9,10 +9,10 @@ type Comparable interface {
 		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
 }
 
-// RbSet zero value is usable. Create with statements like these:
-// var set RbSet[string]
-// set := RbSet[int]{}
-type RbSet[E Comparable] struct {
+// SortedSet zero value is usable. Create with statements like these:
+// var set SortedSet[string]
+// set := SortedSet[int]{}
+type SortedSet[E Comparable] struct {
 	root *node[E]
 	size int
 }
@@ -28,7 +28,7 @@ type node[E Comparable] struct {
 // For example:
 //
 //	ok := tree.Insert(element).
-func (me *RbSet[E]) Insert(element E) bool {
+func (me *SortedSet[E]) Insert(element E) bool {
 	inserted := false
 	me.root, inserted = me.insert(me.root, element)
 	me.root.red = false
@@ -38,7 +38,7 @@ func (me *RbSet[E]) Insert(element E) bool {
 	return inserted
 }
 
-func (me *RbSet[E]) insert(root *node[E], element E) (*node[E], bool) {
+func (me *SortedSet[E]) insert(root *node[E], element E) (*node[E], bool) {
 	inserted := false
 	if root == nil { // If element was in the tree it would go here
 		return &node[E]{element: element, red: true}, true
@@ -98,11 +98,11 @@ func rotateRight[E Comparable](root *node[E]) *node[E] {
 }
 
 // Len returns the number of items in the tree.
-func (me *RbSet[E]) Len() int { return me.size }
+func (me *SortedSet[E]) Len() int { return me.size }
 
 // All returns a for .. range iterable of the set's elements, e.g.,
 // for element := range tree.All()
-func (me *RbSet[E]) All() iter.Seq[E] {
+func (me *SortedSet[E]) All() iter.Seq[E] {
 	return func(yield func(E) bool) {
 		all(me.root, yield)
 	}
@@ -121,8 +121,7 @@ func all[E Comparable](root *node[E], yield func(E) bool) bool {
 // For example:
 //
 //	ok := set.Contains(element).
-func (me *RbSet[E]) Contains(element E) bool {
-	found := false
+func (me *SortedSet[E]) Contains(element E) bool {
 	root := me.root
 	for root != nil {
 		if element < root.element {
@@ -133,7 +132,7 @@ func (me *RbSet[E]) Contains(element E) bool {
 			return true
 		}
 	}
-	return found
+	return false
 }
 
 // Delete deletes the element-value with the given element from the
@@ -143,7 +142,7 @@ func (me *RbSet[E]) Contains(element E) bool {
 //	deleted := set.Delete(element).
 //
 // See also [Clear]
-func (me *RbSet[E]) Delete(element E) bool {
+func (me *SortedSet[E]) Delete(element E) bool {
 	deleted := false
 	if me.root != nil {
 		if me.root, deleted = delete_(me.root, element); me.root != nil {
@@ -249,7 +248,7 @@ func fixUp[E Comparable](root *node[E]) *node[E] {
 
 // Clear deletes the entire tree.
 // See also [Delete]
-func (me *RbSet[E]) Clear() {
+func (me *SortedSet[E]) Clear() {
 	me.root = nil
 	me.size = 0
 }
