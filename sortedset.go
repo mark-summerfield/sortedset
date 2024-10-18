@@ -1,4 +1,8 @@
 // Copyright © 2024 Mark Summerfield. All rights reserved.
+
+// A sorted set based on a red-black tree. ([TOC])
+//
+// [TOC]: file:///home/mark/app/golib/doc/index.html
 package sortedset
 
 import "iter"
