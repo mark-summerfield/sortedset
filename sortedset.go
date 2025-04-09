@@ -9,19 +9,20 @@ import (
 	"fmt"
 	"iter"
 	"strings"
+
+	"github.com/mark-summerfield/unum"
 )
 
-// Comparable allows only string or integer elements.
-type Comparable interface {
-	~string | ~int | ~int8 | ~int16 | ~int32 | ~int64 |
-		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
-}
+type Comparable = unum.Comparable
 
 // SortedSet zero value is usable. Create with statements like these:
-// var set SortedSet[string]
-// set := SortedSet[int]{}
-// or use New:
-// set := New(1, 2, 4)
+//
+//	var set SortedSet[string]
+//	set := SortedSet[int]{}
+//
+// or use [New]:
+//
+//	set := New(1, 2, 4)
 type SortedSet[E Comparable] struct {
 	root *node[E]
 	size int
@@ -285,7 +286,7 @@ func fixUp[E Comparable](root *node[E]) *node[E] {
 }
 
 // Clear deletes all the elements in the SortedSet.
-// See also [Delete]
+// See also [Delete].
 func (me *SortedSet[E]) Clear() {
 	me.root = nil
 	me.size = 0
