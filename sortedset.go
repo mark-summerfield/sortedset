@@ -2,6 +2,8 @@
 
 // ([TOC]) A sorted set based on a red-black tree.
 //
+// See also https://pkg.go.dev/github.com/mark-summerfield/set
+//
 // [TOC]: file:///home/mark/app/golib/doc/index.html
 package sortedset
 
