@@ -2,6 +2,4 @@ module github.com/mark-summerfield/sortedset
 
 go 1.24.0
 
-replace github.com/mark-summerfield/unum => /home/mark/app/golib/unum
-
-require github.com/mark-summerfield/unum v1.0.0
+require github.com/mark-summerfield/unum v0.0.0-20250527071724-18ad82de5e19
