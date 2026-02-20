@@ -12,7 +12,7 @@ func TestAPI(t *testing.T) {
 	//                 012345678
 	letters := []rune("ZENZEBRAS")
 	sset := SortedSet[rune]{}
-	for i := 0; i < len(letters); i++ {
+	for i := range letters {
 		sset.Add(letters[i])
 	}
 	var out strings.Builder
